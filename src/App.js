@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom'
 
 import Navbar from './components/Navbar/Navbar'
 import Users from './components/users/Users'
+import Notfound from './components/404/NotFound'
 import Search from './components/users/search/Search'
 import Alert from './components/Alert/Alert'
 import About from './components/pages/About/About'
@@ -27,6 +28,7 @@ const App = props=> {
                 )} />
                 <Route path="/about" component = {About} />
                 <Route exact path="/user/:login" render={props=> <User {...props} /> } />
+                <Route component = { Notfound }/>
               </Switch>
             </div>
            </AlertState> 
