@@ -1,32 +1,33 @@
-import React, {Component, Fragment} from 'react'
+import React, {useState,useContext, Fragment} from 'react'
+import GithubContext from '../../../context/github/githubContext'
+import AlertContext from '../../../context/alert/AlertContext'
 
-class Search extends Component{
-	state = {
-		text:''
+const Search = props=>{
+	const { searchUser, clearUsers, users } = useContext(GithubContext)
+	const { setAlert } = useContext(AlertContext)
+	const [text, setText] = useState('')
+	const onChange = e=>{
+		setText(e.target.value)
 	}
-	onChange = e=>{
-		this.setState({text:e.target.value})
-	}
-	onSubmit = e =>{
+	const onSubmit = e =>{
 		e.preventDefault()
-		if (this.state.text === '') {
-			this.props.setAlert('Please, enter a name you want to search', 'danger')
+		if (text === '') {
+			setAlert('Please, enter a name you want to search', 'danger')
 		}else{
-			this.props.searchUser(this.state.text)
-			this.setState({text:''})
+			searchUser(text)
+			setText('')
 		}
 	}
-	render(){
 		return(
 			<Fragment>
-				<form onSubmit={this.onSubmit} className="form">
-					<input type="text" placeholder="Search users ..." value={this.state.text} onChange={this.onChange} />
+				<form onSubmit={onSubmit} className="form">
+					<input type="text" placeholder="Search users ..." value={text} onChange={onChange} />
 					<input type="submit" value="Search" className="btn btn-block btn-primary " />
 				</form>
-				{ this.props.showClear && <button onClick={this.props.clearUsers} className="btn btn-light btn-block" >Clear Users</button>}
+				{ users.length > 0 && <button onClick={clearUsers} className="btn btn-light btn-block" >Clear Users</button>}
 			</Fragment>
 		)
-	}
+
 }
 
 export default Search

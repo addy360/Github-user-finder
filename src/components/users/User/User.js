@@ -1,30 +1,32 @@
-import React, { Component, Fragment } from 'react'
+import React, { useEffect, Fragment, useContext } from 'react'
 import { Link } from 'react-router-dom'
 
 import Spinner from '../../Spinner/Spinner'
 import Repos from '../repos/Repos'
+import GithubContect from '../../../context/github/githubContext'
 
-class User extends Component{
-	componentDidMount(){
-		this.props.getUser(this.props.match.params.login)
-		this.props.getUserRepo(this.props.match.params.login)
-	}
-	render(){
-		const {loading} = this.props
+const User = props=>{
+	const { getUser, user, loading, getUserRepo } = useContext(GithubContect)
+	useEffect(()=>{
+		getUser(props.match.params.login)
+		getUserRepo(props.match.params.login)
+	// eslint-disable-next-line
+	},[])
 
-		if(this.props.user === null){
+	
+		if(loading){
 			return <Spinner/>
 		}else{
 			const { 
 				avatar_url,company,name, bio,location,blog,login,html_url,followers,following,public_repos,public_gists,hireable
-			 } = this.props.user
+			 } = user
 			return (
 				<Fragment>
 					<Link to="/" className="btn btn-light" >Back to Search</Link>
 					Hireable : {' '} { hireable ? <i className="fas fa-check text-success"></i> : <i className="fas fa-times-circle text-danger"></i> }
 					<div className="card grid-2">
 						<div className="all-center">
-							<img src={avatar_url} className="round-img" style={{width:'150px'}} />
+							<img src={avatar_url} className="round-img" alt={login} style={{width:'150px'}} />
 							<h1>{name}</h1>
 							<p>{location? `Location : ${location}`: null}</p>
 						</div>
@@ -70,12 +72,11 @@ class User extends Component{
 						<div className="badge badge-light">Public gists: {public_gists}</div>
 					</div>
 
-					<Repos repos={ this.props.repos } />
+					<Repos />
 				</Fragment>
 			)
 
 		} 
 	}
-} 
 
 export default User

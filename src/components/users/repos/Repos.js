@@ -1,14 +1,15 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import RepoItem from './repoItem/RepoItem'
 import Spinner from '../../Spinner/Spinner'
+import GithubContext from '../../../context/github/githubContext'
 
 const Repos = props =>{
-
-	if (props.repos === null ) {
+	const { repos } = useContext(GithubContext)
+	if (repos === null ) {
 		return <Spinner/>
 	}else{
 		return(
-			props.repos.map(repo=><RepoItem key={repo.id} repo={repo} />)
+			repos.map(repo=><RepoItem key={repo.id} repo={repo} />)
 		)
 	}
 }
